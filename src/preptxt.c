@@ -1,13 +1,6 @@
 //Preprocessing txts
 #include <basics.h>
 
-#ifndef MAXFILESZ
-#define MAXFILESZ 8388608
-#endif
-#ifndef MAXTOKSZ
-#define MAXTOKSZ 1048576
-#endif
-
 int tokarr1_len = 0, tokarr2_len = 0;
 char tokarr1[MAXTOKSZ];
 char tokarr2[MAXTOKSZ];
@@ -38,6 +31,7 @@ readtxt2tokarr(char txtfn[], char *tokarr, int *toklen) {
     }
     else tokarr[(*toklen)++] = filebuf[i];
   }
+  fprintf(stderr, "%s: %d token(s)\n", txtfn, *toklen);
   fclose(txtfile);
 }
 
@@ -48,6 +42,7 @@ tokdb() {
   for (int i = 0; i < tokarr1_len; i++)
     fputc(tokarr1[i], prepres);
   fclose(prepres);
+  if (is_single_file) return ;
   prepres = LOCALOPEN_W("tok2.txt");
   for (int i = 0; i < tokarr2_len; i++)
     fputc(tokarr2[i], prepres);
@@ -56,19 +51,24 @@ tokdb() {
 
 void
 preptxt() {
-  FILE *flist1 = LOCALOPEN("list1.txt");
-  FILE *flist2 = LOCALOPEN("list2.txt");
-  assert(flist1 != NULL);
-  assert(flist2 != NULL);
   char txtfn[1024];
+  FILE *flist1 = LOCALOPEN("list1.txt");
+  assert(flist1 != NULL);
   while (~fscanf(flist1, "%s", txtfn)) {
     readtxt2tokarr(txtfn, tokarr1, &tokarr1_len);
   }
+  fclose(flist1);
+  
+  if (is_single_file) goto prep_end;
+  
+  FILE *flist2 = LOCALOPEN("list2.txt");
+  assert(flist2 != NULL);
   while (~fscanf(flist2, "%s", txtfn)) {
     readtxt2tokarr(txtfn, tokarr2, &tokarr2_len);
   }
-  fclose(flist1);
   fclose(flist2);
+
+  prep_end:
 #ifdef DB
   tokdb();
 #endif

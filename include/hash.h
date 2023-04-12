@@ -1,4 +1,5 @@
 #ifndef _HASH_H_
 #define _HASH_H_
-unsigned long long krsm_hash(const char *, const char *);
+void get_shingles();
+extern hashed_shingles1[], hashed_shingles2[];
 #endif

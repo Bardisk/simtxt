@@ -14,6 +14,21 @@
 #include <workdir.h>
 #include <assert.h>
 
+extern bool is_single_file;
+
+#ifndef MAXFILESZ
+#define MAXFILESZ 8388608
+#endif
+#ifndef MAXTOKSZ
+#define MAXTOKSZ 1048576
+#endif
+
+#ifndef MINGRAM
+#define MINGRAM 5
+#endif
+
+#define SHINGLE_LEN(original_len) ((original_len) - MINGRAM + 1)
+
 #ifdef __cplusplus
 
 #endif
