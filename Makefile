@@ -6,8 +6,12 @@ $(shell mkdir -p $(BUILD_DIR))
 INC_PATH = include
 INC_FLAG = $(addprefix -I, $(INC_PATH))
 
-CFLAGS = $(INC_FLAG)
-CXXFLAGS = $(INC_FLAG)
+COMMON_FLAGS = $(INC_FLAG) -Wall -O2
+ifdef DB
+	COMMON_FLAGS += -DDB
+endif
+CFLAGS = $(COMMON_FLAGS)
+CXXFLAGS = $(COMMON_FLAGS)
 
 SRCS = $(shell find -name *.cpp) $(shell find -name *.c)
 OBJS = $(subst ./, $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRCS))))
@@ -34,6 +38,9 @@ $(BUILD_DIR)/simtxt: $(OBJS)
 
 run: $(BUILD_DIR)/simtxt
 	@$(BUILD_DIR)/simtxt
+
+testrun: $(BUILD_DIR)/simtxt
+	@$(BUILD_DIR)/simtxt -D $(abspath tests/xmltest)
 
 clean:
 	-@rm -r build
