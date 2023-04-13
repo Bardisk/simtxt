@@ -27,6 +27,9 @@ extern bool is_single_file;
 #define MINGRAM 5
 #endif
 
+#define MIN(a, b) ((a) > (b) ? (b) : (a))
+#define MAX(a, b) ((a) < (b) ? (b) : (a))
+
 #define SHINGLE_LEN(original_len) ((original_len) - MINGRAM + 1)
 
 #ifdef __cplusplus
