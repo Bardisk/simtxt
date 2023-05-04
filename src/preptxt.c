@@ -7,7 +7,7 @@ char tokarr2[MAXTOKSZ];
 char filebuf[MAXFILESZ], fnbuf[1024];
 
 inline bool isword(char ch) {
-  return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_');
+  return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_') || (ch & (0x80));
 }
 
 inline bool iswhite(char ch) {
@@ -27,7 +27,8 @@ readtxt2tokarr(char txtfn[], char *tokarr, int *toklen) {
     if (isword(filebuf[i])) {
       //It is a word left boundary
       if (i && !isword(filebuf[i - 1]))
-        tokarr[(*toklen)++] = 'W';
+        if (!(*toklen) || tokarr[*toklen - 1] != 'W')
+          tokarr[(*toklen)++] = 'W';
     }
     else tokarr[(*toklen)++] = filebuf[i];
   }
