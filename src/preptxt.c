@@ -16,7 +16,7 @@ inline bool iswhite(char ch) {
 
 void
 readtxt2tokarr(char txtfn[], char *tokarr, int *toklen) {
-  FILE *txtfile = LOCALOPEN_D(txtfn);
+  FILE *txtfile = use_stdin ? stdin : LOCALOPEN_D(txtfn);
 #ifdef DB
   fprintf(stderr, "Opening File %s under workdir\n", txtfn);
 #endif
@@ -31,13 +31,14 @@ readtxt2tokarr(char txtfn[], char *tokarr, int *toklen) {
     }
     else tokarr[(*toklen)++] = filebuf[i];
   }
-  fprintf(stderr, "%s: %d token(s)\n", txtfn, *toklen);
+  fprintf(stderr, "%s: %d token(s)\n", txtfn ? txtfn : "stdin", *toklen);
   fclose(txtfile);
 }
 
 //print token arrays
 void
 tokdb() {
+  // if (use_stdout) return ;
   FILE *prepres = LOCALOPEN_W("tok1.txt");
   for (int i = 0; i < tokarr1_len; i++)
     fputc(tokarr1[i], prepres);
@@ -52,12 +53,16 @@ tokdb() {
 void
 preptxt() {
   char txtfn[1024];
-  FILE *flist1 = LOCALOPEN("list1.txt");
-  assert(flist1 != NULL);
-  while (~fscanf(flist1, "%s", txtfn)) {
-    readtxt2tokarr(txtfn, tokarr1, &tokarr1_len);
+  if (use_stdin)
+    readtxt2tokarr(NULL, tokarr1, &tokarr1_len);
+  else {
+    FILE *flist1 = LOCALOPEN("list1.txt");
+    assert(flist1 != NULL);
+    while (~fscanf(flist1, "%s", txtfn)) {
+      readtxt2tokarr(txtfn, tokarr1, &tokarr1_len);
+    }
+    fclose(flist1);
   }
-  fclose(flist1);
   
   if (is_single_file) goto prep_end;
   

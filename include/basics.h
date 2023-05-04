@@ -15,6 +15,8 @@
 #include <assert.h>
 
 extern bool is_single_file;
+extern bool use_stdin;
+extern bool use_stdout;
 
 #ifndef MAXFILESZ
 #define MAXFILESZ 8388608
@@ -24,7 +26,7 @@ extern bool is_single_file;
 #endif
 
 #ifndef MINGRAM
-#define MINGRAM 5
+#define MINGRAM 8
 #endif
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))

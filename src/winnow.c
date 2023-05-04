@@ -76,7 +76,7 @@ getBM(){
   }
   fclose(bm2);
 #else
-  FILE *bm1 = LOCALOPEN_C("g1.bm", "wb");
+  FILE *bm1 = use_stdout ? stdout : LOCALOPEN_C("g1.bm", "wb");
   fwrite(birthmark1, sizeof(unsigned long long), birthmark1_len, bm1);
   fclose(bm1);
 
