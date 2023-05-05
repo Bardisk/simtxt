@@ -19,10 +19,10 @@ extern bool use_stdin;
 extern bool use_stdout;
 
 #ifndef MAXFILESZ
-#define MAXFILESZ 8388608
+#define MAXFILESZ 1073741824
 #endif
 #ifndef MAXTOKSZ
-#define MAXTOKSZ 1048576
+#define MAXTOKSZ 268435456
 #endif
 
 #ifndef MINGRAM
